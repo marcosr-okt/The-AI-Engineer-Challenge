@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 
-function App() {
+export default function Home() {
   const [developerMessage, setDeveloperMessage] = useState("");
   const [userMessage, setUserMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
@@ -10,7 +10,7 @@ function App() {
   const abortControllerRef = useRef(null);
 
   // Use environment variable for API base URL, fallback to localhost for dev
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,5 +131,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -4,3 +4,7 @@ node_modules
 dist
 coverage
 .vscode
+.next
+out
+build
+*.log
