@@ -9,6 +9,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef(null);
 
+  // Use environment variable for API base URL, fallback to localhost for dev
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setResponse("");
@@ -17,7 +20,7 @@ function App() {
     abortControllerRef.current = new AbortController();
 
     try {
-      const res = await fetch("http://localhost:8000/api/chat", {
+      const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
