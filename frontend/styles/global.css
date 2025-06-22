@@ -1,0 +1,134 @@
+:root {
+  --pastel-bg: #f8f6f0;
+  --pastel-accent: #c96b82;
+  --pastel-form: #e0ece4;
+  --pastel-input: #f6e7d8;
+  --pastel-btn: #b8e0d2;
+  --pastel-btn-hover: #95cfc4;
+  --pastel-border: #e2cfc3;
+  --pastel-shadow: 0 4px 24px #e2cfc366;
+  --pastel-title: #000000;
+  --pastel-label: #000000;
+  --pastel-response: #f7d6e0;
+}
+
+html,
+body {
+  background: var(--pastel-bg);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  font-family: "Quicksand", "Montserrat", "Segoe UI", Arial, sans-serif;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  min-height: 500px;
+  background: var(--pastel-bg);
+}
+
+.form-section {
+  flex: 1;
+  min-width: 0;
+  background: var(--pastel-form);
+  border-radius: 18px;
+  box-shadow: var(--pastel-shadow);
+  padding: 2rem 2rem 2rem 2rem;
+  border: 1.5px solid var(--pastel-border);
+}
+
+.form-section h2 {
+  color: var(--pastel-title);
+  font-family: "Montserrat", "Quicksand", Arial, sans-serif;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.form-section label {
+  color: var(--pastel-label);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.form-section input,
+.form-section textarea {
+  background: var(--pastel-input);
+  border: 1.5px solid var(--pastel-border);
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  margin-bottom: 1.1rem;
+  padding-top: 0.7rem;
+  font-size: 1rem;
+  width: 100%;
+  transition: border 0.2s;
+}
+
+.form-section input:focus,
+.form-section textarea:focus {
+  outline: none;
+  border: 1.5px solid var(--pastel-accent);
+}
+
+.form-section button {
+  background: var(--pastel-btn);
+  color: #4b4b4b;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #e2cfc366;
+  transition: background 0.2s;
+}
+
+.form-section button:hover,
+.form-section button:focus {
+  background: var(--pastel-btn-hover);
+}
+
+.output-section {
+  flex: 1;
+  min-width: 0;
+  background: var(--pastel-response);
+  min-height: 400px;
+  padding: 28px 24px 24px 24px;
+  border-radius: 18px;
+  box-shadow: var(--pastel-shadow);
+  border: 1.5px solid var(--pastel-border);
+  overflow: auto;
+  font-size: 1.08rem;
+}
+
+.output-section strong {
+  color: var(--pastel-title);
+  font-size: 1.1rem;
+  font-family: "Montserrat", "Quicksand", Arial, sans-serif;
+}
+
+.output-section pre {
+  background: none;
+  min-height: 100px;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  color: #5c5c5c;
+  font-family: "Quicksand", "Montserrat", "Segoe UI", Arial, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 1rem;
+    min-height: unset;
+    padding: 0 0.5rem;
+  }
+  .form-section,
+  .output-section {
+    padding: 1.2rem 0.8rem;
+    min-height: unset;
+  }
+}
