@@ -8,8 +8,11 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef(null);
 
-  // Use environment variable for API base URL, fallback to localhost for dev
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  // Use relative path for production (same domain), and full URL for development if needed
+  const isDev = typeof window !== "undefined" && window.location.hostname === "localhost";
+  const API_BASE_URL = isDev
+    ? process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+    : "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,17 +22,20 @@ export default function Home() {
     abortControllerRef.current = new AbortController();
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          developer_message: developerMessage,
-          user_message: userMessage,
-          model: "gpt-4.1-mini", // always use this model
-          api_key: apiKey,
-        }),
-        signal: abortControllerRef.current.signal,
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/api/chat`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            developer_message: developerMessage,
+            user_message: userMessage,
+            model: "gpt-4.1-mini", // always use this model
+            api_key: apiKey,
+          }),
+          signal: abortControllerRef.current.signal,
+        }
+      );
 
       if (!res.body) throw new Error("No response body");
 
@@ -56,10 +62,24 @@ export default function Home() {
     setLoading(false);
   };
 
+  // Combobox options for agent role
+  const agentRoles = [
+    {
+      label: "Peruvian chef",
+      value:
+        "You are an expert of peruvian food from tacna to tumbes, highlands and peruvian jungle, and give advice based on user opinions",
+    },
+    {
+      label: "English teacher",
+      value:
+        "you give a small story about the user topic, no more than 30 words",
+    },
+  ];
+
   return (
     <div className="container">
       <div className="form-section" id="form-section">
-        <h2>OpenAI Chat API UI</h2>
+        <h2>Agent Checker</h2>
         <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
           <div>
             <label>
@@ -75,14 +95,35 @@ export default function Home() {
           </div>
           <div>
             <label>
-              Developer Message:
-              <textarea
+              Agent role:
+              <select
                 value={developerMessage}
                 onChange={(e) => setDeveloperMessage(e.target.value)}
                 required
-                rows={3}
-                style={{ maxWidth: "100%" }}
-              />
+                style={{
+                  maxWidth: "100%",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginTop: "0.3rem",
+                  marginBottom: "1.1rem",
+                  padding: "0.7rem",
+                  borderRadius: "8px",
+                  border: "1.5px solid #e2cfc3",
+                  fontSize: "1rem",
+                  width: "100%",
+                  boxSizing: "border-box",
+                }}
+              >
+                <option value="" disabled>
+                  Select an agent role...
+                </option>
+                {agentRoles.map((role) => (
+                  <option key={role.label} value={role.value}>
+                    {role.label}
+                  </option>
+                ))}
+              </select>
             </label>
           </div>
           <div>
@@ -97,7 +138,24 @@ export default function Home() {
               />
             </label>
           </div>
-          <button type="submit" disabled={loading} style={{ marginRight: 8 }}>
+          <button
+            type="submit"
+            className={
+              loading ||
+              !apiKey.trim() ||
+              !developerMessage.trim() ||
+              !userMessage.trim()
+                ? "send-btn disabled"
+                : "send-btn"
+            }
+            disabled={
+              loading ||
+              !apiKey.trim() ||
+              !developerMessage.trim() ||
+              !userMessage.trim()
+            }
+            style={{ marginRight: 8 }}
+          >
             {loading ? "Sending..." : "Send"}
           </button>
           {loading && (
@@ -121,6 +179,28 @@ export default function Home() {
         </pre>
       </div>
       <style jsx>{`
+        .send-btn {
+          background: var(--pastel-btn, #b8e0d2);
+          color: #4b4b4b;
+          border: none;
+          border-radius: 8px;
+          padding: 0.7rem 1.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          box-shadow: 0 2px 8px #e2cfc366;
+          transition: background 0.2s;
+        }
+        .send-btn:hover,
+        .send-btn:focus {
+          background: var(--pastel-btn-hover, #95cfc4);
+        }
+        .send-btn.disabled,
+        .send-btn:disabled {
+          background: #cccccc !important;
+          color: #888888 !important;
+          cursor: not-allowed !important;
+        }
         @media (max-width: 768px) {
           .container {
             flex-direction: column;
